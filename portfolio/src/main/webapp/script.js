@@ -15,14 +15,39 @@
 /**
  * Adds a random greeting to the page.
  */
-function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
 
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+function openPage(element, page_name) {
+  // Hide all elements with class="page-content" by default */
+  var i, page, button;
+  page = document.getElementsByClassName("page-content");
+  for (i = 0; i < page.length; i++) {
+    page[i].style.display = "none";
+  }
+  
+  button = document.getElementsByClassName("nav-button");
+  // Make all buttons default
+  for (i = 0; i < button.length; i++) {
+    button[i].className = "nav-button";
+  }
 
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+  // Make current page's description button active
+  console.log(element)
+  element.parentElement.className += " nav-button_active";
+
+  // Show the specific tab content
+  document.getElementById(page_name).style.display = "block";
 }
+
+$(document).ready(function(){ 
+  $(window).scroll(function(){ 
+      if ($(this).scrollTop() > 100) { 
+          $('#scroll').fadeIn(); 
+      } else { 
+          $('#scroll').fadeOut(); 
+      } 
+  }); 
+  $('#scroll').click(function(){ 
+      $("html, body").animate({ scrollTop: 0 }, 600); 
+      return false; 
+  }); 
+});

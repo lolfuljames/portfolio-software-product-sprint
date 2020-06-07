@@ -5,6 +5,7 @@ html *
    font-family: Helvetica;
    background-color: #222;
    box-sizing: border-box;
+   font-size: 16px;
 }
 
 body {
@@ -22,6 +23,7 @@ body {
   height: 100px;
   background-color: #222;
 }
+
 .header-container {
   position: sticky;
   top: 0px;
@@ -106,7 +108,7 @@ body {
 }
 
 .project-card {
-  max-width: 700px;
+  max-width: 500px;
   height: auto;
   /* padding: 80px; */
   margin: 90px;
@@ -123,7 +125,7 @@ body {
 }
 
 .project-content img {
-  max-width: 700px;
+  max-width: 500px;
   padding-bottom: 50px;
 }
 
@@ -157,7 +159,7 @@ body {
 
 .album-content {
   padding: 10px;
-  max-width: 850px;
+  max-width: 600px;
 }
 
 /* contact buttons style */
@@ -165,35 +167,4 @@ body {
   display:flex;
   align-items: center;
   justify-content: center;
-}
-
-#scroll {
-  position:fixed;
-  right:10px;
-  bottom:10px;
-  cursor:pointer;
-  width:50px;
-  height:50px;
-  background-color:#3498db;
-  text-indent:-9999px;
-  display:none;
-  -webkit-border-radius:60px;
-  -moz-border-radius:60px;
-  border-radius:60px
-}
-#scroll span {
-  position:absolute;
-  top:50%;
-  left:50%;
-  margin-left:-8px;
-  margin-top:-12px;
-  height:0;
-  width:0;
-  border:8px solid transparent;
-  border-bottom-color:#ffffff;
-}
-#scroll:hover {
-  background-color:#e74c3c;
-  opacity:1;filter:"alpha(opacity=100)";
-  -ms-filter:"alpha(opacity=100)";
 }

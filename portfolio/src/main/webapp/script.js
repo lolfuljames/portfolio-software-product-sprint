@@ -37,17 +37,3 @@ function openPage(element, page_name) {
   // Show the specific tab content
   document.getElementById(page_name).style.display = "block";
 }
-
-$(document).ready(function(){ 
-  $(window).scroll(function(){ 
-      if ($(this).scrollTop() > 100) { 
-          $('#scroll').fadeIn(); 
-      } else { 
-          $('#scroll').fadeOut(); 
-      } 
-  }); 
-  $('#scroll').click(function(){ 
-      $("html, body").animate({ scrollTop: 0 }, 600); 
-      return false; 
-  }); 
-});

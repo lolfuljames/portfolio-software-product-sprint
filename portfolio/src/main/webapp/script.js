@@ -37,3 +37,10 @@ function openPage(element, page_name) {
   // Show the specific tab content
   document.getElementById(page_name).style.display = "block";
 }
+
+function sayHello() {
+    fetch('/data').then(response => response.text()).then(
+        (message) => {
+        document.getElementById('hello-container').innerHTML = message
+    });
+}

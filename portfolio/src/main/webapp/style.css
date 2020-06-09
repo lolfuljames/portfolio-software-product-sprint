@@ -164,7 +164,15 @@ body {
 
 /* contact buttons style */
 .contact-container {
-  display:flex;
+  display: flex;
   align-items: center;
   justify-content: center;
+}
+
+#hello-container {
+  text-align: center;
+}
+
+#hello-container * {
+  margin: auto;
 }

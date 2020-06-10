@@ -47,7 +47,7 @@
         <button
           type="button"
           class="nav-button_transparent"
-          onclick="openPage(this, 'contact')"
+          onclick="openPage(this, 'contact'); sayHello();"
         >
           <span>CONTACT</span>
         </button>
@@ -277,6 +277,7 @@
 
     <!-- Contact section -->
     <div class="page-content inactive" id="contact">
+      <div id="hello-container"></div>
       <div class="contact-container">
         <div>
           <a target="_blank" href="https://github.com/lolfuljames"

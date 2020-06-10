@@ -15,7 +15,7 @@
 package com.google.sps.servlets;
 import com.google.gson.Gson;
 import java.util.Arrays;
-import java.util.ArrayList;
+import java.util.List;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,7 +25,10 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-  ArrayList<String> randomMessages = new ArrayList<String>(Arrays.asList("This isn't it.", "Try harder bro.", "You should reconsider your choices.", "You did it! Here's a cookie."));
+  List<String> randomMessages = Arrays.asList("This isn't it.",
+                                              "Try harder bro.",
+                                              "You should reconsider your choices.",
+                                              "You did it! Here's a cookie.");
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -34,7 +37,7 @@ public class DataServlet extends HttpServlet {
     response.getWriter().println(data);
   }
 
-  private String convertToJsonUsingGson(ArrayList<String> data) {
+  private String convertToJsonUsingGson(List<String> data) {
     Gson gson = new Gson();
     String json = gson.toJson(data);
     return json;

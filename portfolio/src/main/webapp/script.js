@@ -39,8 +39,19 @@ function openPage(element, page_name) {
 }
 
 function sayHello() {
-    fetch('/data').then(response => response.text()).then(
-        (message) => {
-        document.getElementById('hello-container').innerHTML = message
-    });
+    fetch('/data').then(response => response.json()).then(
+      data => {
+        document.getElementById('hello-container').appendChild(arrayToListElement(data))
+      });
+}
+
+function arrayToListElement(array) {
+  const ulElement = document.createElement('ul');
+  for (node of array) {
+    const liElement = document.createElement('li');
+    liElement.innerText = node
+    ulElement.appendChild(liElement)
+  }
+
+  return ulElement
 }

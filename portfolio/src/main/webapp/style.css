@@ -173,6 +173,10 @@ body {
   text-align: center;
 }
 
+#hello-container ul {
+  list-style-position: inside;
+}
+
 #hello-container * {
   margin: auto;
 }

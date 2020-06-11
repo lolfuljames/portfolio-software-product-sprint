@@ -47,9 +47,18 @@
         <button
           type="button"
           class="nav-button_transparent"
-          onclick="openPage(this, 'contact'); sayHello();"
+          onclick="openPage(this, 'contact');"
         >
           <span>CONTACT</span>
+        </button>
+      </div>
+      <div class="nav-button">
+        <button
+          type="button"
+          class="nav-button_transparent"
+          onclick="openPage(this, 'comments'); sayHello();"
+        >
+          <span>COMMENTS</span>
         </button>
       </div>
       <div class="header-spacing"></div>
@@ -277,7 +286,6 @@
 
     <!-- Contact section -->
     <div class="page-content inactive" id="contact">
-      <div id="hello-container"></div>
       <div class="contact-container">
         <div>
           <a target="_blank" href="https://github.com/lolfuljames"
@@ -289,6 +297,12 @@
             ><img src="images/linkedin-icon.png" height="100"
           /></a>
         </div>
+      </div>
+    </div>
+
+    <!-- Comments section -->
+    <div class="page-content inactive" id="comments">
+      <div id="hello-container">
       </div>
     </div>
   </body>

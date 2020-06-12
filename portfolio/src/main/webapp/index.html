@@ -56,7 +56,7 @@
         <button
           type="button"
           class="nav-button_transparent"
-          onclick="openPage(this, 'comments'); sayHello();"
+          onclick="openPage(this, 'comments'); loadComments();"
         >
           <span>COMMENTS</span>
         </button>
@@ -303,7 +303,17 @@
     <!-- Comments section -->
     <div class="page-content inactive" id="comments">
       <div id="hello-container">
+        <div id="comments-list"></div>
+        <br/><br/><br/>
+        <form action="/data" method="POST" target="dummyframe">
+          <p>Add your own comments!</p>
+          <input type="text" name="user-comment">
+          <br/><br/>
+          <!-- TODO: fix race condition, times where fetch completes before post -->
+          <button type="submit" onclick="loadComments();">Submit</button>
+        </form>
       </div>
     </div>
+    <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
   </body>
 </html>

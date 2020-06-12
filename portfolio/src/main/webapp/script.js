@@ -38,30 +38,30 @@ function openPage(element, page_name) {
   document.getElementById(page_name).style.display = "block";
 }
 
-function sayHello() {
-    fetch('/data').then(response => response.json()).then(
-      data => {
-        showComments(data);
-      });
+function loadComments() {
+  fetch('/data').then(response => response.json()).then(
+    data => {
+      showComments(data);
+    });
 }
 
 function arrayToListElement(array) {
   const ulElement = document.createElement('ul');
   for (node of array) {
     const liElement = document.createElement('li');
-    liElement.innerText = node
-    ulElement.appendChild(liElement)
+    liElement.innerText = node;
+    ulElement.appendChild(liElement);
   }
 
-  return ulElement
+  return ulElement;
 }
 
 function showComments(data) {
-  helloContainer = document.getElementById('hello-container');
-  // prevents duplicate elements
-  if (helloContainer.hasChildNodes()) {
+  commentContainer = document.getElementById('comments-list');
+  // prevents duplicate comment elements
+  if (commentContainer.hasChildNodes()) {
     // only removes first node as currently there is only the comments node
-    helloContainer.removeChild(helloContainer.childNodes[0]);
+    commentContainer.removeChild(commentContainer.childNodes[0]);
   }
-  helloContainer.appendChild(arrayToListElement(data));
+  commentContainer.appendChild(arrayToListElement(data));
 }

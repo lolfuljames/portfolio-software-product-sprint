@@ -41,7 +41,7 @@ function openPage(element, page_name) {
 function sayHello() {
     fetch('/data').then(response => response.json()).then(
       data => {
-        document.getElementById('hello-container').appendChild(arrayToListElement(data))
+        showComments(data);
       });
 }
 
@@ -54,4 +54,14 @@ function arrayToListElement(array) {
   }
 
   return ulElement
+}
+
+function showComments(data) {
+  helloContainer = document.getElementById('hello-container');
+  // prevents duplicate elements
+  if (helloContainer.hasChildNodes()) {
+    // only removes first node as currently there is only the comments node
+    helloContainer.removeChild(helloContainer.childNodes[0]);
+  }
+  helloContainer.appendChild(arrayToListElement(data));
 }

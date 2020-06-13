@@ -12,9 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * Adds a random greeting to the page.
- */
+// jQuery for form submission
+$("#comment-form").submit(function(event){
+	event.preventDefault();
+	var postUrl = "/comments";
+	var formData = $(this).serialize();
+
+	$.post(postUrl, formData, function() {
+	  loadComments();
+	});
+});
 
 function openPage(element, page_name) {
   // Hide all elements with class="page-content" by default */

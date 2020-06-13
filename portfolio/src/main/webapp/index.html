@@ -7,6 +7,7 @@
     <meta name="author" content="James Tan Chee Min">
     <title>Home - James Tan</title>
     <link rel="stylesheet" href="style.css" />
+    <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script defer src="script.js"></script>
   </head>
   <body onload="loadComments();">
@@ -305,12 +306,12 @@
       <div id="hello-container">
         <div id="comments-list"></div>
         <br/><br/><br/>
-        <form action="/comments" method="POST" target="dummyframe">
+        <form id="comment-form" target="dummyframe">
           <p>Add your own comments!</p>
           <input type="text" name="user-comment">
           <br/><br/>
           <!-- TODO: fix race condition, times where fetch completes before post -->
-          <button type="submit" onclick="loadComments();">Submit</button>
+          <button type="submit">Submit</button>
         </form>
       </div>
     </div>

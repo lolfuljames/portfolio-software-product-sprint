@@ -7,9 +7,10 @@
     <meta name="author" content="James Tan Chee Min">
     <title>Home - James Tan</title>
     <link rel="stylesheet" href="style.css" />
+    <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script defer src="script.js"></script>
   </head>
-  <body>
+  <body onload="loadComments();">
     <!-- Top navigation bar -->
     <div class="header-bg"></div>
     <div class="header-container">
@@ -47,9 +48,18 @@
         <button
           type="button"
           class="nav-button_transparent"
-          onclick="openPage(this, 'contact'); sayHello();"
+          onclick="openPage(this, 'contact');"
         >
           <span>CONTACT</span>
+        </button>
+      </div>
+      <div class="nav-button">
+        <button
+          type="button"
+          class="nav-button_transparent"
+          onclick="openPage(this, 'comments');loadComments()"
+        >
+          <span>COMMENTS</span>
         </button>
       </div>
       <div class="header-spacing"></div>
@@ -277,7 +287,6 @@
 
     <!-- Contact section -->
     <div class="page-content inactive" id="contact">
-      <div id="hello-container"></div>
       <div class="contact-container">
         <div>
           <a target="_blank" href="https://github.com/lolfuljames"
@@ -291,5 +300,21 @@
         </div>
       </div>
     </div>
+
+    <!-- Comments section -->
+    <div class="page-content inactive" id="comments">
+      <div id="hello-container">
+        <div id="comments-list"></div>
+        <br/><br/><br/>
+        <form id="comment-form" target="dummyframe">
+          <p>Add your own comments!</p>
+          <input type="text" name="user-comment">
+          <br/><br/>
+          <!-- TODO: fix race condition, times where fetch completes before post -->
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+    <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
   </body>
 </html>

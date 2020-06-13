@@ -12,9 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * Adds a random greeting to the page.
- */
+// jQuery for form submission
+$("#comment-form").submit(function(event){
+	event.preventDefault();
+	var postUrl = "/comments";
+	var formData = $(this).serialize();
+
+	$.post(postUrl, formData, function() {
+	  loadComments();
+	});
+});
 
 function openPage(element, page_name) {
   // Hide all elements with class="page-content" by default */
@@ -38,20 +45,30 @@ function openPage(element, page_name) {
   document.getElementById(page_name).style.display = "block";
 }
 
-function sayHello() {
-    fetch('/data').then(response => response.json()).then(
-      data => {
-        document.getElementById('hello-container').appendChild(arrayToListElement(data))
-      });
+function loadComments() {
+  fetch('/comments').then(response => response.json()).then(
+    data => {
+      showComments(data);
+    });
 }
 
 function arrayToListElement(array) {
   const ulElement = document.createElement('ul');
   for (node of array) {
     const liElement = document.createElement('li');
-    liElement.innerText = node
-    ulElement.appendChild(liElement)
+    liElement.innerText = node.message;
+    ulElement.appendChild(liElement);
   }
 
-  return ulElement
+  return ulElement;
+}
+
+function showComments(data) {
+  commentContainer = document.getElementById('comments-list');
+  // prevents duplicate comment elements
+  if (commentContainer.hasChildNodes()) {
+    // only removes first node as currently there is only the comments node
+    commentContainer.removeChild(commentContainer.childNodes[0]);
+  }
+  commentContainer.appendChild(arrayToListElement(data));
 }

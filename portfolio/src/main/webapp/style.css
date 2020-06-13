@@ -173,7 +173,8 @@ body {
   text-align: center;
 }
 
-#hello-container ul {
+#comments-list ul {
+  left: 40%;
   list-style-position: inside;
 }
 

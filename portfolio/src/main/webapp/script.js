@@ -39,7 +39,7 @@ function openPage(element, page_name) {
 }
 
 function loadComments() {
-  fetch('/data').then(response => response.json()).then(
+  fetch('/comments').then(response => response.json()).then(
     data => {
       showComments(data);
     });

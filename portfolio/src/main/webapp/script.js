@@ -17,7 +17,7 @@ $("#comment-form").submit(function(event){
 	event.preventDefault();
 	var postUrl = "/comments";
 	var formData = $(this).serialize();
-
+  this.reset();
 	$.post(postUrl, formData, function() {
 	  loadComments();
 	});

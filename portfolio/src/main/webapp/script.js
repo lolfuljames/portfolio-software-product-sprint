@@ -49,7 +49,7 @@ function arrayToListElement(array) {
   const ulElement = document.createElement('ul');
   for (node of array) {
     const liElement = document.createElement('li');
-    liElement.innerText = node;
+    liElement.innerText = node.message;
     ulElement.appendChild(liElement);
   }
 

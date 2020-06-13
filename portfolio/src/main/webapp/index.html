@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="style.css" />
     <script defer src="script.js"></script>
   </head>
-  <body>
+  <body onload="loadComments();">
     <!-- Top navigation bar -->
     <div class="header-bg"></div>
     <div class="header-container">
@@ -56,7 +56,7 @@
         <button
           type="button"
           class="nav-button_transparent"
-          onclick="openPage(this, 'comments'); loadComments();"
+          onclick="openPage(this, 'comments');loadComments()"
         >
           <span>COMMENTS</span>
         </button>

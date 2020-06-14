@@ -13,14 +13,14 @@
 // limitations under the License.
 
 // jQuery for form submission
-$("#comment-form").submit(function(event){
-	event.preventDefault();
-	var postUrl = "/comments";
-	var formData = $(this).serialize();
+$("#comment-form").submit(function(event) {
+  event.preventDefault();
+  var postUrl = "/comments";
+  var formData = $(this).serialize();
   this.reset();
-	$.post(postUrl, formData, function() {
-	  loadComments();
-	});
+  $.post(postUrl, formData, function() {
+    loadComments();
+  });
 });
 
 function openPage(element, page_name) {
@@ -30,7 +30,7 @@ function openPage(element, page_name) {
   for (i = 0; i < page.length; i++) {
     page[i].style.display = "none";
   }
-  
+
   button = document.getElementsByClassName("nav-button");
   // Make all buttons default
   for (i = 0; i < button.length; i++) {

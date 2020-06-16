@@ -46,6 +46,9 @@ function openPage(element, page_name) {
 }
 
 function loadComments() {
+  fetch('/login-status').then(response => response.text()).then(
+    status => processLoginStatus(status)
+  );
   fetch('/comments').then(response => response.json()).then(
     data => {
       showComments(data);
@@ -71,4 +74,14 @@ function showComments(data) {
     commentContainer.removeChild(commentContainer.childNodes[0]);
   }
   commentContainer.appendChild(arrayToListElement(data));
+}
+
+function processLoginStatus(status) {
+  if (status === "Logged") {
+    console.log(status);
+    console.log("User is logged in");
+  } else {
+    console.log(status);
+    console.log("User is not logged in");
+  }
 }

@@ -14,7 +14,6 @@
 
 package com.google.sps.servlets;
 
-import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import java.io.IOException;
@@ -34,7 +33,6 @@ public class AccountServlet extends HttpServlet {
     PrintWriter out = response.getWriter();
     UserService userService = UserServiceFactory.getUserService();
 
-    // If user is not logged in, show a login form (could also redirect to a login page)
     if (!userService.isUserLoggedIn()) {
       userLoggedIn = "notLogged";
     } else {

@@ -24,6 +24,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -47,8 +49,8 @@ public class DataServlet extends HttpServlet {
       long id = entity.getKey().getId();
       String message = (String) entity.getProperty("message");
       long timestamp = (long) entity.getProperty("timestamp");
-
-      Comment comment = new Comment(id, message, timestamp);
+      String email = (String) entity.getProperty("email");
+      Comment comment = new Comment(id, message, timestamp, email);
       comments.add(comment);
     }
 
@@ -59,13 +61,16 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    UserService userService = UserServiceFactory.getUserService();
     String userComment = request.getParameter("user-comment");
     long timestamp = System.currentTimeMillis();
-    if (userComment.isEmpty()) return;
+    String userEmail = userService.getCurrentUser().getEmail();
+    if (userComment.replaceAll("\\s","").isEmpty()) return;
 
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("message", userComment);
     commentEntity.setProperty("timestamp", timestamp);
+    commentEntity.setProperty("email", userEmail);
 
     datastore.put(commentEntity);
   }

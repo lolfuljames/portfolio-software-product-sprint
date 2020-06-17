@@ -38,7 +38,6 @@ function openPage(element, page_name) {
   }
 
   // Make current page's description button active
-  console.log(element)
   element.parentElement.className += " nav-button_active";
 
   // Show the specific tab content
@@ -46,7 +45,7 @@ function openPage(element, page_name) {
 }
 
 function loadComments() {
-  fetch('/login-status').then(response => response.text()).then(
+  fetch('/login-status').then(response => response.status).then(
     status => processLoginStatus(status)
   );
   fetch('/comments').then(response => response.json()).then(
@@ -59,7 +58,7 @@ function arrayToListElement(array) {
   const ulElement = document.createElement('ul');
   for (node of array) {
     const liElement = document.createElement('li');
-    liElement.innerText = node.message;
+    liElement.innerText = node.message + " - " + node.email;
     ulElement.appendChild(liElement);
   }
 
@@ -77,11 +76,37 @@ function showComments(data) {
 }
 
 function processLoginStatus(status) {
-  if (status === "Logged") {
-    console.log(status);
-    console.log("User is logged in");
-  } else {
-    console.log(status);
-    console.log("User is not logged in");
+  // HTTP Status OK = 200
+  if (status === 200) {
+    showCommentForm();
+  }
+  // HTTP Status Unauthorized = 401
+  else if (status == 401) {
+    hideCommentForm();
+  }
+  
+  else return;
+  fetch("/login").then(response => response.text()).then(
+      loginButton => showLoginLogout(loginButton)
+  );
+}
+
+function hideCommentForm() {
+  var form;
+  form = document.getElementById("comment-form")
+  form.style.display = "none";
+}
+
+function showCommentForm() {
+  var form
+  form = document.getElementById("comment-form")
+  form.style.display = "block"
+}
+
+function showLoginLogout(button) {
+  var containers;
+  containers = document.getElementsByClassName("login-logout-container");
+  for (container of containers) {
+    container.innerHTML = button;
   }
 }

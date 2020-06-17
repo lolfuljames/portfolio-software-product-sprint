@@ -20,10 +20,12 @@ public final class Comment {
   private final long id;
   private final String message;
   private final long timestamp;
+  private final String email;
 
-  public Comment(long id, String message, long timestamp) {
+  public Comment(long id, String message, long timestamp, String email) {
     this.id = id;
     this.message = message;
     this.timestamp = timestamp;
+    this.email = email;
   }
 }

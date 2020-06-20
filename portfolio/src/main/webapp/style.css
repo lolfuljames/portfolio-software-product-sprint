@@ -175,7 +175,11 @@ body {
 
 #comments-list ul {
   left: 40%;
-  list-style-position: inside;
+  list-style-type: none;
+}
+
+#comment-form {
+  display: none;
 }
 
 #hello-container * {

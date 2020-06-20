@@ -30,18 +30,12 @@ public class LoginStatusServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String userLoggedIn;
-    response.setContentType("application/json");
-    PrintWriter out = response.getWriter();
     UserService userService = UserServiceFactory.getUserService();
-    Gson gson = new Gson();
 
     if (!userService.isUserLoggedIn()) {
-      userLoggedIn = gson.toJson("notLogged");
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     } else {
-      userLoggedIn = gson.toJson("Logged");
       response.setStatus(HttpServletResponse.SC_OK);
     }
-    out.print(userLoggedIn);
   }
 }

@@ -83,9 +83,8 @@ function processLoginStatus(status) {
   // HTTP Status Unauthorized = 401
   else if (status == 401) {
     hideCommentForm();
-  }
-  
-  else return;
+  } else return;
+
   fetch("/login").then(response => response.text()).then(
       loginButton => showLoginLogout(loginButton)
   );

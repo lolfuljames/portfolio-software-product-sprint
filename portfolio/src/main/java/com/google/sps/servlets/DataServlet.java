@@ -62,10 +62,10 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
-    String userComment = request.getParameter("user-comment");
+    String userComment = request.getParameter("user-comment").trim();
     long timestamp = System.currentTimeMillis();
     String userEmail = userService.getCurrentUser().getEmail();
-    if (userComment.replaceAll("\\s","").isEmpty()) return;
+    if (userComment.isEmpty()) return;
 
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("message", userComment);

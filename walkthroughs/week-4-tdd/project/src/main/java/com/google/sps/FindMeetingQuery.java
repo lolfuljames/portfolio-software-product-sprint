@@ -21,12 +21,21 @@ import java.io.*;
 
 public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+    // filter entries
+
     // sort by time
     List<TimeRange> occupiedQueue = new ArrayList<TimeRange>();
+
+    // Create dummy events for StartOfDay and EndOfDay
+    occupiedQueue.add(TimeRange.fromStartDuration(TimeRange.START_OF_DAY, 0));
+    occupiedQueue.add(TimeRange.fromStartDuration(TimeRange.END_OF_DAY + 1, 0));
+
+    // Create entry timeslots for the events
     for (Event event: events) {
       occupiedQueue.add(event.getWhen());
     }
     Collections.sort(occupiedQueue, TimeRange.ORDER_BY_START);
+
     // combine events to make bigger chunks
     for (int currentEventIdx = 0;
          currentEventIdx < occupiedQueue.size();
@@ -47,11 +56,8 @@ public final class FindMeetingQuery {
           } else {
             // Combine events
             TimeRange combinedSlot = TimeRange.fromStartEnd(
-              curSlotStart, adjSlotEnd, true);
+              curSlotStart, adjSlotEnd, false);
             occupiedQueue.set(currentEventIdx, combinedSlot);
-            // current_event.setWhen(
-            //   TimeRange.fromStartDuration(
-            //     cur_event_start, adj_event_end - cur_event_start));
             occupiedQueue.remove(adjEventIdx);
           }
         } else {
@@ -64,22 +70,17 @@ public final class FindMeetingQuery {
     // create events to fill in the gap
     List<TimeRange> vacantEvents= new ArrayList<TimeRange>();
     TimeRange vacantSlot = null;
+
     for (int currentEventIdx = 0;
          currentEventIdx < occupiedQueue.size() - 1;
          currentEventIdx++) {
       // |OE1|   <vacantEvent here>   |OE2|
       TimeRange occupiedSlot1 = occupiedQueue.get(currentEventIdx);
       TimeRange occupiedSlot2 = occupiedQueue.get(currentEventIdx + 1);
-      if (currentEventIdx == 0) {
-        vacantSlot = TimeRange.fromStartEnd(
-          TimeRange.START_OF_DAY, occupiedSlot1.start(), false);
-      } else {
-        vacantSlot = TimeRange.fromStartEnd(
-          occupiedSlot1.end(), occupiedSlot2.start(), false);
-      }
+      vacantSlot = TimeRange.fromStartEnd(
+        occupiedSlot1.end(), occupiedSlot2.start(), false);
       vacantEvents.add(vacantSlot);
     }
-    vacantEvents.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TimeRange.END_OF_DAY, false));
     return (Collection<TimeRange>)vacantEvents;
   }
 }

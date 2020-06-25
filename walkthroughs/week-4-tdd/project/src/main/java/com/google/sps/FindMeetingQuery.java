@@ -15,25 +15,34 @@
 package com.google.sps;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;  
 import java.util.Collection;
 import java.util.Collections;
-import java.io.*;
 
 public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    // filter entries
-
-    // sort by time
+    List<TimeRange> vacantSlots= new ArrayList<TimeRange>();
     List<TimeRange> occupiedQueue = new ArrayList<TimeRange>();
+
+    // filter entries
+    if (request.getAttendees().size() == 0) {
+      vacantSlots.add(TimeRange.WHOLE_DAY);
+      return vacantSlots;
+    }
+    if (request.getDuration() > TimeRange.END_OF_DAY) {
+      return vacantSlots;
+    }
 
     // Create dummy events for StartOfDay and EndOfDay
     occupiedQueue.add(TimeRange.fromStartDuration(TimeRange.START_OF_DAY, 0));
-    occupiedQueue.add(TimeRange.fromStartDuration(TimeRange.END_OF_DAY + 1, 0));
+    occupiedQueue.add(TimeRange.fromStartDuration(TimeRange.END_OF_DAY + 1, 10));
 
     // Create entry timeslots for the events
     for (Event event: events) {
       occupiedQueue.add(event.getWhen());
     }
+    
+    // sort by time
     Collections.sort(occupiedQueue, TimeRange.ORDER_BY_START);
 
     // combine events to make bigger chunks
@@ -68,9 +77,7 @@ public final class FindMeetingQuery {
       }
     }
     // create events to fill in the gap
-    List<TimeRange> vacantEvents= new ArrayList<TimeRange>();
     TimeRange vacantSlot = null;
-
     for (int currentEventIdx = 0;
          currentEventIdx < occupiedQueue.size() - 1;
          currentEventIdx++) {
@@ -79,8 +86,16 @@ public final class FindMeetingQuery {
       TimeRange occupiedSlot2 = occupiedQueue.get(currentEventIdx + 1);
       vacantSlot = TimeRange.fromStartEnd(
         occupiedSlot1.end(), occupiedSlot2.start(), false);
-      vacantEvents.add(vacantSlot);
+      vacantSlots.add(vacantSlot);
     }
-    return (Collection<TimeRange>)vacantEvents;
+
+    Iterator<TimeRange> vacantSlotsIter = vacantSlots.iterator();
+    // Filter based on duration, iterator is used to support removal while iteration
+    while(vacantSlotsIter.hasNext()){
+      if(vacantSlotsIter.next().duration() < request.getDuration()){
+        vacantSlotsIter.remove();
+      }
+    }
+    return (Collection<TimeRange>)vacantSlots;
   }
 }

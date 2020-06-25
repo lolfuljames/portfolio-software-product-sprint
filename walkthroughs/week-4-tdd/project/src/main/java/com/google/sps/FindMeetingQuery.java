@@ -15,16 +15,36 @@
 package com.google.sps;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 import java.util.Iterator;  
 import java.util.Collection;
 import java.util.Collections;
 
 public final class FindMeetingQuery {
-  public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+
+  private Boolean isEventIrrelevant(Event event, MeetingRequest meeting) {
+    Collection<String> eventAttendees = event.getAttendees();
+    Collection<String> requiredAttendees = meeting.getAttendees();
+    for (String eventAttendee: eventAttendees) {
+      if (requiredAttendees.contains(eventAttendee)) return false;
+    }
+    return true;
+  }
+
+  private Boolean isSlotInsufficient(TimeRange vacantSlot, MeetingRequest meeting) {
+    return vacantSlot.duration() < meeting.getDuration();
+  }
+
+  public Collection<TimeRange> query(Collection<Event> eventsSource, MeetingRequest request) {
     List<TimeRange> vacantSlots= new ArrayList<TimeRange>();
     List<TimeRange> occupiedQueue = new ArrayList<TimeRange>();
+    List<Event> events = new ArrayList<Event>();
+    // duplicate events list to support removal of events
+    for (Event event: eventsSource) {
+      events.add(event);
+    }
 
-    // filter entries
+    // handle edge-case entries
     if (request.getAttendees().size() == 0) {
       vacantSlots.add(TimeRange.WHOLE_DAY);
       return vacantSlots;
@@ -33,9 +53,12 @@ public final class FindMeetingQuery {
       return vacantSlots;
     }
 
+    // filter entries
+    events.removeIf(event -> isEventIrrelevant(event, request));
+
     // Create dummy events for StartOfDay and EndOfDay
     occupiedQueue.add(TimeRange.fromStartDuration(TimeRange.START_OF_DAY, 0));
-    occupiedQueue.add(TimeRange.fromStartDuration(TimeRange.END_OF_DAY + 1, 10));
+    occupiedQueue.add(TimeRange.fromStartDuration(TimeRange.END_OF_DAY + 1, 0));
 
     // Create entry timeslots for the events
     for (Event event: events) {
@@ -90,12 +113,8 @@ public final class FindMeetingQuery {
     }
 
     Iterator<TimeRange> vacantSlotsIter = vacantSlots.iterator();
-    // Filter based on duration, iterator is used to support removal while iteration
-    while(vacantSlotsIter.hasNext()){
-      if(vacantSlotsIter.next().duration() < request.getDuration()){
-        vacantSlotsIter.remove();
-      }
-    }
+    // Filter based on duration
+    vacantSlots.removeIf(timeSlot -> isSlotInsufficient(timeSlot, request));
     return (Collection<TimeRange>)vacantSlots;
   }
 }

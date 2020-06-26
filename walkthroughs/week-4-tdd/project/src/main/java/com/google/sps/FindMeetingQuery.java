@@ -21,7 +21,7 @@ import java.util.Collections;
 public final class FindMeetingQuery {
 
   /** Returns true if {@event} is not attended by any attendees in the meeting request */
-  private Boolean isEventIrrelevant(Event event, MeetingRequest meeting) {
+  private Boolean hasNoCommonAttendees(Event event, MeetingRequest meeting) {
     Collection<String> eventAttendees = event.getAttendees();
     Collection<String> requiredAttendees = meeting.getAttendees();
     return Collections.disjoint(eventAttendees, requiredAttendees);
@@ -44,7 +44,7 @@ public final class FindMeetingQuery {
 
   /** Remove events in {@events} that are not attended by any meeting attendees */
   private void filterEvents(List<Event> events, MeetingRequest request) {
-    events.removeIf(event -> isEventIrrelevant(event, request));
+    events.removeIf(event -> hasNoCommonAttendees(event, request));
   }
 
   private void sortTimeRangeByStart(List<TimeRange> list) {

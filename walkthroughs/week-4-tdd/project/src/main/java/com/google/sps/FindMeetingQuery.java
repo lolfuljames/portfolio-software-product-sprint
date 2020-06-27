@@ -42,24 +42,16 @@ public final class FindMeetingQuery {
     return request.getDuration() > TimeRange.END_OF_DAY || request.getDuration() < 0;
   }
 
-  /** Remove events in {@events} that are not attended by any meeting attendees */
-  private void filterEvents(List<Event> events, MeetingRequest request) {
-    events.removeIf(event -> hasNoCommonAttendees(event, request));
-  }
-
   private void sortTimeRangeByStart(List<TimeRange> list) {
     Collections.sort(list, TimeRange.ORDER_BY_START);
   }
 
-  /** Removes vacant slots in {@vacantSlots} if available duration is insufficient */
-  private void filterVacantSlots(List<TimeRange> vacantSlots, MeetingRequest request) {
-    vacantSlots.removeIf(timeSlot -> isSlotInsufficient(timeSlot, request));
-  }
-
-  /** Adds start/end-bounding TimeRange objects for {@queue} */
-  private void initializeOccupiedQueue(List<TimeRange> queue) {
+  /** Returns a List {@queue} with start/end-bounding TimeRange objects */
+  private List<TimeRange> createInitializedOccupiedQueue() {
+    List<TimeRange> queue = new ArrayList<TimeRange>();
     queue.add(TimeRange.fromStartDuration(TimeRange.START_OF_DAY, 0));
     queue.add(TimeRange.fromStartDuration(TimeRange.END_OF_DAY + 1, 0));
+    return queue;
   }
 
   /**
@@ -107,10 +99,6 @@ public final class FindMeetingQuery {
   }
 
   public Collection<TimeRange> query(Collection<Event> eventsSource, MeetingRequest request) {
-    List<TimeRange> vacantSlots= new ArrayList<TimeRange>();
-    List<TimeRange> occupiedQueue = new ArrayList<TimeRange>();
-    // Duplicate events list to support removal of events
-    List<Event> events = new ArrayList<>(eventsSource);
 
     if (hasNoAttendees(request)) {
       return Collections.singletonList(TimeRange.WHOLE_DAY);
@@ -119,11 +107,12 @@ public final class FindMeetingQuery {
       return Collections.emptyList();
     }
 
-    // Filter entries that required attendees are not joining
-    filterEvents(events, request);
+    List<TimeRange> vacantSlots= new ArrayList<TimeRange>();
+    List<TimeRange> occupiedQueue = createInitializedOccupiedQueue();
+    // Duplicate events list to support removal of events
+    List<Event> events = new ArrayList<>(eventsSource);
 
-    // Create dummy entries for StartOfDay and EndOfDay
-    initializeOccupiedQueue(occupiedQueue);
+    events.removeIf(event -> hasNoCommonAttendees(event, request));
 
     // Create entry timeslots for the events
     for (Event event: events) {
@@ -142,8 +131,7 @@ public final class FindMeetingQuery {
       vacantSlots.add(createVacantSlot(occupiedQueue, i));
     }
 
-    // Filter out vacant slots that do not meet duration requirement
-    filterVacantSlots(vacantSlots, request);
+    vacantSlots.removeIf(timeSlot -> isSlotInsufficient(timeSlot, request));
     return vacantSlots;
   }
 }
